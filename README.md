@@ -1,17 +1,22 @@
-# BWT_iBWT
+# BWT_iBWT tool: DNA sequence to BWT string (and viceversa)
 A test GitHub repository for a set of client/server python scripts (as part of the Scientific Programming class).
+
+![Example Image](./images/img1.png)
 
 ## Python scripts
 ### CLIENT
 This script allows the user to send a request conversion:
-- from **DNA sequence** to a Borrows-Wheeler Transform string
+- from **DNA sequence** to a Burrows-Wheeler Transform string
 - from a **Burrows-Wheeler Transform** string to a DNA sequence
 The host:port required by *flask* (an external package https://flask.palletsprojects.com/en/2.3.x/) is manually inputed by the user when invoking the client-to-server connection. Here's an example of the syntax required:
 > python3 BWT_client.py method host port sequence
 
-The method can either be *bwt* (*i.e.* DNA to BWT) or *ibwt* (*i.e.* inverse bwt, BWT to DNA), the host should be in the 0.0.0.0 format and port should be in the *10^3* order of magnitude.
+The method can either be *bwt* (*i.e.* DNA to BWT), or *ibwt* (*i.e.* inverse bwt, BWT to DNA), the host should be in the 0.0.0.0 format and port should be in the *10^3* order of magnitude.
+
 Sequence can be inputed either directly as a string between "", or from an external .txt file: the script handles both approaches, recognising the extension in the name and reading the file: this file should only contain the sequence itself, with characters 'A', 'C', 'G', 'T' and '-' for mismatches.
-Whenever a sequence is passed to the client and server from a .txt file, the client - upon receival of the output from the server and having displayed it – asks the user to input the name of a file where the sequence would be saved. Whenever a sequence is instead passed directly in the invoke command, the output is only displayed. 
+
+Whenever a sequence is passed to the client and server from a .txt file, the client - upon receival of the output from the server and having displayed it – asks the user to input the name of a file where the sequence would be saved. Whenever a sequence is instead passed directly in the invoke command, the output is only displayed.
+
 The script also handles a simple timer (via the built-in *time* python package) to measure the computation and response time.
 
 ### SERVER
@@ -19,6 +24,7 @@ Two options are provided: one using a very simple (*i.e.* BWT_server_simple.py) 
 > python3 BWT_server______.py
 
 The *dna_to_bwt()* function used when the client invokes the *bwt* method adds '^' at the beginning of the sequence, and '|' at the end of it, to then perform the Burrows-Wheeler transformation and return the string with the markers included.
+
 The *bwt_to_dna()* function used then the client invoked the *ibwt* method reorganises correctly the string using the '^' and '|' as markers, to then remove them before returning the string to the client.
 
 ## Server host:port reconfiguration
@@ -32,6 +38,7 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # e.g., limit upload size to 16MB
 
 Such a limitation could be required to avoid DoS (denial-of-services) attacks or resource exhaustion.
+
 Moreover, since this tool is going to handle only DNA sequences and BWT strings, no EOF (end of file) terminator was used. And no multiprocessing approach was implemented - although both could be easily implemented without the need of huge alterations to the code.
 
 ## Example files
